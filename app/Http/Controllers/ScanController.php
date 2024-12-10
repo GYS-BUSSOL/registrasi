@@ -20,7 +20,11 @@ class ScanController extends Controller
 
     public function checkEmployee(Request $request)
     {
-        $employee = DB::select('EXEC [dbo].[sp_checkEmployee] ?, ?', [$request->scan, $request->employee_id]);
+        $employee_id = $request->employee_id;
+        if (strlen($request->employee_id) > 9) {
+            $employee_id = substr($request->employee_id, 1);
+        }
+        $employee = DB::select('EXEC [dbo].[sp_checkEmployee] ?, ?', [$request->scan, $employee_id]);
 
         if (!empty($employee)) {
             $employee = $employee[0];

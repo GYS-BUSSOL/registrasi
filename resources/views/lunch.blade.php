@@ -15,8 +15,9 @@
                     <div class="panel panel-primary cardbg">
                         <div class="card">
                             <div class="card-body">
-                                <div class="col-md-12"><br>
-                                    <form action="" method="post" class="form-horizontal">
+                                <form id="barcode" class="form-horizontal">
+                                    @csrf
+                                    <div class="col-md-12"><br>
                                         <div>
                                             <!-- SCAN CODE QR WITH CAMERA -->
                                             <div class="col-md-5 col-md-offset-4">
@@ -27,21 +28,18 @@
                                             </div>
                                             <!-- SCAN CODE QR WITH CAMERA -->
                                         </div> <br>
-                                    </form>
-                                    <div class="row">
-                                        <form id="barcode">
-                                            @csrf
+                                        <div class="row">
                                             <div class="form-group col-md-4" style="margin-left: 10px;">
-                                                <input type="hidden" name="scan" id="scan" value="2">
+                                                <input type="hidden" name="scan" id="scan" value="1">
                                                 <input type="text" class="form-control" name="qr_number" id='qr_number'
                                                     placeholder="Masukan Nomor Barcode" required />
                                             </div>
                                             <div>
                                                 <button type="submit" class="btn btn-primary">Search</button>
                                             </div>
-                                        </form>
+                                        </div>
                                     </div>
-                                </div>
+                                </form>
                             </div>
                         </div>
                     </div>
