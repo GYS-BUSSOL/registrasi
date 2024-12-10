@@ -2,22 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Scan;
-use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class ScanController extends Controller
 {
-    /**
-     * EXEC [dbo].[sp_checkEmployee] '1', '100212001' = sp buat cek hasil scan, ada 2 parameter, 
-     * yg pertama buat liat dia scan register atau lunch, yang kedua itu nomor karyawannya.
-     * nah nanti, setelah dapet, hasilnya tampilin di popup, data karyawannya, buat konfirmasi
-     
-     * trn_registration = kalau user scan buat register = 1, kalau user scan lagi buat lunch update jadi 2
-     
-     * his_registration = masukin semua data, mau itu scan buat register maupun scan buat lunch
-     */
 
     public function showRegister()
     {
