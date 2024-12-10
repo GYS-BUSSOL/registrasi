@@ -53,7 +53,7 @@
                     console.error('Gagal mengambil data peserta:', error);
                 });
         }
-        console.log(participants)
+        // console.log(participants)
 
         // Mulai pengacakan
         function startDraw() {
@@ -101,7 +101,7 @@
                     `;
                 })
                 .catch(error => {
-                    randomNumberElement.textContent = '0000';
+                    randomNumberElement.textContent = '000000000';
                     resultElement.innerHTML = `
                         <div class="alert alert-danger mt-3">
                             <p>${error.response.data.message}</p>
