@@ -15,7 +15,8 @@ class DoorprizeController extends Controller
 
     public function getParticipants()
     {
-        $participants = DB::table('mst_dbox_employee')->pluck('employee_id'); // Hanya ambil kolom employee_id
+        $participants = DB::table('mst_dbox_employee')->pluck('employee_id'); // Sample data
+        // $participants = DB::table('trn_registration')->pluck('employee_id');
         if ($participants->isEmpty()) {
             return response()->json(['message' => 'Tidak ada peserta terdaftar.'], 404);
         }
@@ -25,7 +26,7 @@ class DoorprizeController extends Controller
 
     public function draw()
     {
-        $participants = DB::select('SELECT employee_id, full_name, department_name FROM mst_dbox_employee');
+        $participants = DB::select('SELECT employee_id, full_name, department_name FROM mst_dbox_employee'); // sample data
         // $participants = DB::select('SELECT trn_registration.employee_id, mst_dbox_employee.full_name, mst_dbox_employee.department_name FROM trn_registration INNER JOIN mst_dbox_employee ON trn_registration.employee_id = mst_dbox_employee.employee_id')
 
         if (count($participants) > 0) {
