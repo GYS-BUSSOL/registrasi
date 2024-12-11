@@ -4,13 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use LdapRecord\Container;
-use LdapRecord\Models\ActiveDirectory\User as LdapUser;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 
 class LoginController extends Controller
 {
+    //Captcha
+    public function reloadCaptcha()
+    {
+        return response()->json(['captcha' => captcha_img()]);
+    }
+
     // Menampilkan form login
     public function showLoginForm()
     {
@@ -20,6 +24,9 @@ class LoginController extends Controller
     // Proses login
     public function login(Request $request)
     {
+        $request->validate([
+            'captcha' => 'required|captcha'
+        ]);
         $adServers = ["ldap://gysdc01.gyssteel.com", "ldap://gysdc02.gyssteel.com"];
         $username = $request->username;
         $password = $request->password;

@@ -9,6 +9,8 @@ Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
+Route::get('reload-captcha', [LoginController::class, 'reloadCaptcha']);
+
 // Route::get('/', [ScanController::class, 'showRegister'])->name('register');
 // Route::post('/', [ScanController::class, 'scanRegister'])->name('register.post');
 // Route::post('/cek-karyawan', [ScanController::class, 'checkEmployee']);

@@ -76,24 +76,34 @@
                             </div>
                             <form action="{{ route('login') }}" method="post">
                                 @csrf
-                                <div class="form-group position-relative has-icon-left">
+                                <div class="form-group position-relative">
                                     <label for="username">Username</label>
                                     <div class="position-relative">
                                         <input type="text" class="form-control val-input" id="username"
                                             name="username" oninput="validateInput()" required>
-                                        <div class="form-control-icon">
-                                            <i data-feather="user"></i>
-                                        </div>
                                     </div>
                                 </div>
-                                <div class="form-group position-relative has-icon-left">
+                                <div class="form-group position-relative">
                                     <div class="position-relative">
                                         <label for="password">Password</label>
                                         <input type="password" class="form-control val-input" id="password"
                                             name="password" oninput="validateInput()" required>
-                                        <div class="form-control-icon">
-                                            <i data-feather="lock"></i>
-                                        </div>
+                                    </div>
+                                </div>
+                                <div
+                                    class="form-group d-flex position-relative align-items-center justify-content-center">
+                                    <div class="position-relative captcha">
+                                        <span class="mx-2">{!! captcha_img() !!}</span>
+                                        <button type="button" class="btn btn-warning reload mx-2"
+                                            id="reload">&#x21bb;
+                                            Reload</button>
+                                    </div>
+                                </div>
+                                <div class="form-group position-relative">
+                                    <label for="captcha">Captcha</label>
+                                    <div class="position-relative">
+                                        <input type="text" class="form-control val-input" id="captcha"
+                                            name="captcha" oninput="validateInput()" required>
                                     </div>
                                 </div>
                                 <div class="clearfix">
@@ -107,6 +117,18 @@
         </div>
 
     </div>
+
+    <script>
+        $('#reload').click(function() {
+            $.ajax({
+                type: 'GET',
+                url: 'reload-captcha',
+                success: function(data) {
+                    $(".captcha span").html(data.captcha)
+                }
+            });
+        });
+    </script>
 
     <script src="{{ asset('assets/js/feather-icons/feather.min.js') }}"></script>
     <script src="{{ asset('assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>

@@ -24,19 +24,15 @@ class DoorprizeController extends Controller
         return response()->json($participants);
     }
 
-    public function draw()
+    public function draw(Request $request)
     {
-        $participants = DB::select('SELECT employee_id, full_name, department_name FROM mst_dbox_employee'); // sample data
-        // $participants = DB::select('SELECT trn_registration.employee_id, mst_dbox_employee.full_name, mst_dbox_employee.department_name FROM trn_registration INNER JOIN mst_dbox_employee ON trn_registration.employee_id = mst_dbox_employee.employee_id')
+        $winner = DB::select('SELECT employee_id, full_name, department_name FROM mst_dbox_employee WHERE employee_id = ?', [$request->employee_id]); // sample data
+        // $winner = DB::select('SELECT trn_registration.employee_id, mst_dbox_employee.full_name, mst_dbox_employee.department_name FROM trn_registration INNER JOIN mst_dbox_employee ON trn_registration.employee_id = mst_dbox_employee.employee_id WHERE employee_id = ?', [$request->employee_id])
 
-        if (count($participants) > 0) {
-            $winner = $participants[array_rand($participants)];
-            return response()->json([
-                'message' => 'Selamat Kepada:',
-                'winner' => $winner
-            ]);
-        }
-
-        return response()->json(['message' => 'Tidak ada peserta untuk diundi.'], 404);
+        DB::insert('INSERT INTO trn_undian (employee_id, created_at, created_by) VALUES (?,?,?)', [$request->employee_id, now()->format('Y-m-d H:i:s'), session('id')]);
+        return response()->json([
+            'message' => 'Selamat Kepada:',
+            'winner' => $winner[0]
+        ]);
     }
 }

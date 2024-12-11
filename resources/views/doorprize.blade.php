@@ -42,6 +42,7 @@
         let participants = []; // Array untuk menyimpan ID karyawan
         let interval; // Interval untuk animasi pengacakan
         let isRunning = false; // Status animasi
+        let currentRandomNumber = null; // Menyimpan nomor yang terakhir ditampilkan
 
         // Ambil data ID karyawan dari server
         function fetchParticipants() {
@@ -70,7 +71,8 @@
             // Mulai animasi pengacakan angka
             interval = setInterval(() => {
                 const randomIndex = Math.floor(Math.random() * participants.length);
-                randomNumberElement.textContent = participants[randomIndex]; // Tampilkan ID karyawan acak
+                currentRandomNumber = participants[randomIndex]; // Simpan nomor terakhir
+                randomNumberElement.textContent = currentRandomNumber; // Tampilkan ID karyawan acak
             }, 50); // Ubah angka setiap 50ms
         }
 
@@ -87,15 +89,17 @@
             const resultElement = document.getElementById('result');
 
             // Kirim permintaan ke server untuk mendapatkan pemenang
-            axios.post('/draw')
+            axios.post('/draw', {
+                    employee_id: currentRandomNumber
+                })
                 .then(response => {
                     const winner = response.data.winner;
                     randomNumberElement.textContent = winner.employee_id; // Tampilkan ID pemenang
                     resultElement.innerHTML = `
                         <div class="alert alert-success mt-3">
                             <h3>${response.data.message}</h3>
-                            <p>Pemenang: <strong>${winner.full_name}</strong></p>
                             <p>ID Karyawan: <strong>${winner.employee_id}</strong></p>
+                            <p>Pemenang: <strong>${winner.full_name}</strong></p>
                             <p>Department: <strong>${winner.department_name}</strong></p>
                         </div>
                     `;
