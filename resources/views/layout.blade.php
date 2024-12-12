@@ -172,7 +172,7 @@
 
     <!-- END THEME LAYOUT SCRIPTS -->
     <script src="{{ asset('assets/bootstrap-toastr/toastr.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('assets/jquery.pulsate.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/js/jquery.pulsate.min.js') }}" type="text/javascript"></script>
 
     {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">

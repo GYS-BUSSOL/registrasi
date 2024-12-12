@@ -15,9 +15,9 @@
                     <div class="panel panel-primary cardbg">
                         <div class="card">
                             <div class="card-body">
-                                <form id="barcode" class="form-horizontal">
-                                    @csrf
-                                    <div class="col-md-12"><br>
+                                <div class="col-md-12"><br>
+                                    <form class="form-horizontal">
+                                        @csrf
                                         <div>
                                             <!-- SCAN CODE QR WITH CAMERA -->
                                             <div class="col-md-5 col-md-offset-4">
@@ -27,18 +27,20 @@
                                                 </div>
                                             </div>
                                             <!-- SCAN CODE QR WITH CAMERA -->
-                                        </div> <br>
-                                        <div class="row">
-                                            <div class="form-group col-md-4" style="margin-left: 10px;">
-                                                <input type="hidden" name="scan" id="scan" value="1">
-                                                <input type="text" class="form-control" name="qr_number" id='qr_number'
-                                                    placeholder="Masukan Nomor Barcode" required />
-                                            </div>
-                                            <div>
-                                                <button type="submit" class="btn btn-primary">Search</button>
-                                            </div>
+                                    </form>
+                                </div> <br>
+                                <div class="row">
+                                    <form id="barcode" action="">
+                                        @csrf
+                                        <div class="form-group col-md-4" style="margin-left: 10px;">
+                                            <input type="text" class="form-control" name="qr_number" id='qr_number'
+                                                placeholder="Masukan Nomor Barcode" required />
                                         </div>
-                                </form>
+                                        <div>
+                                            <button type="submit" class="btn btn-primary">Search</button>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -106,72 +108,20 @@
     </div>
     <!-- Page Content Ends-->
 
-    {{-- Check Karyawan --}}
-    <script>
-        $(document).ready(function() {
-            $('#barcode').on('submit', function(e) {
-                e.preventDefault();
-
-                let scan = $('#scan').val();
-                let idKaryawan = $('#qr_number').val();
-                let csrfToken = $('input[name="_token"]').val();
-
-                // Kirim data ke controller menggunakan AJAX
-                $.ajax({
-                    url: '/cek-karyawan', // Route ke controller
-                    method: 'POST',
-                    data: {
-                        _token: csrfToken,
-                        employee_id: idKaryawan,
-                        scan: scan,
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            // Tampilkan data di modal
-                            $('#id').text(response.data.id);
-                            $('#nama').text(response.data.nama);
-                            $('#department').text(response.data.department);
-                            // Tampilkan modal
-                            $('#popUp').modal('show');
-
-
-                            // Konfirmasi untuk menyimpan data
-                            $('#confirm').on('click', function() {
-                                $.ajax({
-                                    url: '/', // Route untuk menyimpan ke tabel register
-                                    method: 'POST',
-                                    data: {
-                                        _token: csrfToken,
-                                        employee_id: response.data.id
-                                    },
-                                    success: function(saveResponse) {
-                                        alert(saveResponse.message);
-                                        location
-                                            .reload(); // Muat ulang halaman jika perlu
-                                    }
-                                });
-                            });
-                        } else {
-                            // Jika karyawan sudah registrasi atau karyawan tidak ditemukan tampilkan popup
-                            $('#message').text(response.data.message);
-                            $('#fail-nama').text(response.data.nama);
-                            $('#fail-department').text(response.data.department);
-                            // Tampilkan modal
-                            $('#popUpFail').modal('show');
-                        }
-                    }
-                });
-            });
-        });
-    </script>
-
     <!-- JS SCAN CODE QR -->
     <script src="{{ asset('assets/js/html5-qrcode.min.js') }}"></script>
     <!-- JS SCAN CODE QR -->
 
     <script type="text/javascript">
-        // JQUERY SCAN CODE QR
+        $(document).ready(function() {
+            $('#barcode').on('submit', function(e) {
+                e.preventDefault();
+                let idKaryawan = $('#qr_number').val();
+                getData(idKaryawan)
+            });
+        });
 
+        // JQUERY SCAN CODE QR
         function docReady(fn) {
             // see if DOM is already available
             if (document.readyState === "complete" || document.readyState === "interactive") {
@@ -190,8 +140,7 @@
                 if (qrCodeMessage !== lastResult) {
                     ++countResults;
                     lastResult = qrCodeMessage;
-                    resultContainer.innerHTML += `${qrCodeMessage}'`;
-                    getData(resultContainer.innerHTML);
+                    getData(qrCodeMessage);
                 }
                 html5QrcodeScanner.clear();
             }
@@ -205,15 +154,54 @@
             html5QrcodeScanner.render(onScanSuccess);
 
         });
-        // JQUERY SCAN CODE QR
-        function getData(v) {
-            url = v;
-            // console.log(url);
-            location.href = url;
+
+        function getData(qrCode) {
+            console.log(qrCode)
+            let csrfToken = $('input[name="_token"]').val();
+            $.ajax({
+                url: '/cek-karyawan', // Route ke controller
+                method: 'POST',
+                data: {
+                    _token: csrfToken,
+                    employee_id: qrCode,
+                    scan: 1,
+                },
+                success: function(response) {
+                    if (response.success) {
+                        // Tampilkan data di modal
+                        $('#id').text(response.data.id);
+                        $('#nama').text(response.data.nama);
+                        $('#department').text(response.data.department);
+                        // Tampilkan modal
+                        $('#popUp').modal('show');
+
+
+                        // Konfirmasi untuk menyimpan data
+                        $('#confirm').on('click', function() {
+                            $.ajax({
+                                url: '/', // Route untuk menyimpan ke tabel register
+                                method: 'POST',
+                                data: {
+                                    _token: csrfToken,
+                                    employee_id: response.data.id
+                                },
+                                success: function(saveResponse) {
+                                    alert(saveResponse.message);
+                                    location
+                                        .reload(); // Muat ulang halaman jika perlu
+                                }
+                            });
+                        });
+                    } else {
+                        // Jika karyawan sudah registrasi atau karyawan tidak ditemukan tampilkan popup
+                        $('#message').text(response.data.message);
+                        $('#fail-nama').text(response.data.nama);
+                        $('#fail-department').text(response.data.department);
+                        // Tampilkan modal
+                        $('#popUpFail').modal('show');
+                    }
+                }
+            });
         }
     </script>
-    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
-    </script> --}}
-
 @endsection
