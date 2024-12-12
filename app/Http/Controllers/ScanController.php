@@ -72,50 +72,6 @@ class ScanController extends Controller
                 ],
             ]);
         }
-
-        // // data karyawan ada, karyawan belum terdaftar di trn_registration, scan di halaman registrasi
-        // if (!empty($employee) && empty($employeeExist) && $request->scan == 1) {
-        //     $employee = $employee[0];
-        //     return response()->json([
-        //         'success' => true,
-        //         'data' => [
-        //             'id' => $employee->employee_id,
-        //             'nama' => $employee->full_name,
-        //             'department' => $employee->department_name,
-        //         ],
-        //     ]);
-        // }
-        // // data karyawan tidak ada, karyawan sudah terdaftar di trn_registration, scan di halaman registrasi
-        // else if (!empty($employee) && !empty($employeeExist) && $request->scan == 1) {
-        //     $employee = $employee[0];
-        //     return response()->json([
-        //         'success' => false,
-        //         'data' => [
-        //             'message' => 'Karyawan sudah registrasi.',
-        //             'nama' => $employee->full_name,
-        //             'department' => $employee->department_name,
-        //         ],
-        //     ]);
-        // }
-        // // data karyawan ada, scan di halaman lunch
-        // else if (!empty($employee) && $request->scan == 1) {
-        //     $employee = $employee[0];
-        //     return response()->json([
-        //         'success' => true,
-        //         'data' => [
-        //             'id' => $employee->employee_id,
-        //             'nama' => $employee->full_name,
-        //             'department' => $employee->department_name,
-        //         ],
-        //     ]);
-        // }
-
-        // return response()->json([
-        //     'success' => false,
-        //     'data' => [
-        //         'message' => 'Data karyawan tidak ditemukan.',
-        //     ],
-        // ]);
     }
 
     public function scanRegister(Request $request)
