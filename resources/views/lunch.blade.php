@@ -93,6 +93,7 @@
                 </div>
                 <div class="modal-body">
                     <p><span id="message"></span></p>
+                    <p><span id="fail-nama"></span> - <span id="fail-department"></span></p>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary ml-1" data-bs-dismiss="modal">
@@ -153,6 +154,8 @@
                         } else {
                             // Jika karyawan sudah registrasi atau karyawan tidak ditemukan tampilkan popup
                             $('#message').text(response.data.message);
+                            $('#fail-nama').text(response.data.nama);
+                            $('#fail-department').text(response.data.department);
                             // Tampilkan modal
                             $('#popUpFail').modal('show');
                         }

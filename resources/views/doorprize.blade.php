@@ -95,14 +95,26 @@
                 .then(response => {
                     const winner = response.data.winner;
                     randomNumberElement.textContent = winner.employee_id; // Tampilkan ID pemenang
-                    resultElement.innerHTML = `
+                    if (response.data.status == 'success') {
+                        resultElement.innerHTML = `
                         <div class="alert alert-success mt-3">
                             <h3>${response.data.message}</h3>
-                            <p>ID Karyawan: <strong>${winner.employee_id}</strong></p>
                             <p>Pemenang: <strong>${winner.full_name}</strong></p>
+                            <p>ID Karyawan: <strong>${winner.employee_id}</strong></p>
                             <p>Department: <strong>${winner.department_name}</strong></p>
                         </div>
                     `;
+                    } else {
+                        resultElement.innerHTML = `
+                        <div class="alert alert-danger mt-3">
+                            <h3>${response.data.message}</h3>
+                            <p>Pemenang: <strong>${winner.full_name}</strong></p>
+                            <p>ID Karyawan: <strong>${winner.employee_id}</strong></p>
+                            <p>Department: <strong>${winner.department_name}</strong></p>
+                        </div>
+                    `;
+                    }
+
                 })
                 .catch(error => {
                     randomNumberElement.textContent = '000000000';
