@@ -30,7 +30,7 @@
                                         </div> <br>
                                         <div class="row">
                                             <div class="form-group col-md-4" style="margin-left: 10px;">
-                                                <input type="hidden" name="scan" id="scan" value="1">
+                                                <input type="hidden" name="scan" id="scan" value="2">
                                                 <input type="text" class="form-control" name="qr_number" id='qr_number'
                                                     placeholder="Masukan Nomor Barcode" required />
                                             </div>
@@ -74,6 +74,28 @@
                 </div>
                 <div class="modal-footer">
                     <button id="confirm" type="submit" class="btn btn-primary ml-1" data-bs-dismiss="modal">
+                        <i class="bx bx-check d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">OK</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Popup Karyawan sudah Registrasi dan Karyawan tidak ditemukan-->
+    <div class="modal fade text-left" id="popUpFail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel120"
+        aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <h5 class="modal-title white" id="myModalLabel120">
+                        Info
+                    </h5>
+                </div>
+                <div class="modal-body">
+                    <p><span id="message"></span></p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary ml-1" data-bs-dismiss="modal">
                         <i class="bx bx-check d-block d-sm-none"></i>
                         <span class="d-none d-sm-block">OK</span>
                     </button>
@@ -129,7 +151,10 @@
                                 });
                             });
                         } else {
-                            alert(response.message); // Pesan jika karyawan tidak ditemukan
+                            // Jika karyawan sudah registrasi atau karyawan tidak ditemukan tampilkan popup
+                            $('#message').text(response.data.message);
+                            // Tampilkan modal
+                            $('#popUpFail').modal('show');
                         }
                     }
                 });

@@ -74,6 +74,20 @@
                                 <img src="{{ asset('assets/images/GYSLogo.png') }}" height="55" class='mb-4'>
                                 <h3>Sign In</h3>
                             </div>
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <p>{{ $error }}</p>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+                            @if (session()->has('error'))
+                                <div class="alert alert-danger">
+                                    {{ session('error') }}
+                                </div>
+                            @endif
                             <form action="{{ route('login') }}" method="post">
                                 @csrf
                                 <div class="form-group position-relative">
@@ -90,20 +104,20 @@
                                             name="password" oninput="validateInput()" required>
                                     </div>
                                 </div>
+                                <div class="form-group position-relative">
+                                    <label for="captcha">Captcha</label>
+                                    <div class="position-relative">
+                                        <input type="text" class="form-control val-input" id="captcha"
+                                            name="captcha" oninput="validateInput()" required>
+                                    </div>
+                                </div>
                                 <div
                                     class="form-group d-flex position-relative align-items-center justify-content-center">
                                     <div class="position-relative captcha">
                                         <span class="mx-2">{!! captcha_img() !!}</span>
                                         <button type="button" class="btn btn-warning reload mx-2"
                                             id="reload">&#x21bb;
-                                            Reload</button>
-                                    </div>
-                                </div>
-                                <div class="form-group position-relative">
-                                    <label for="captcha">Captcha</label>
-                                    <div class="position-relative">
-                                        <input type="text" class="form-control val-input" id="captcha"
-                                            name="captcha" oninput="validateInput()" required>
+                                            Refresh</button>
                                     </div>
                                 </div>
                                 <div class="clearfix">

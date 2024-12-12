@@ -26,22 +26,96 @@ class ScanController extends Controller
         }
         $employee = DB::select('EXEC [dbo].[sp_checkEmployee] ?, ?', [$request->scan, $employee_id]);
 
+        $employeeExist = DB::select('SELECT * FROM trn_registration WHERE employee_id = ?', [$employee_id]);
+
+        // kalau data karyawan ada
         if (!empty($employee)) {
             $employee = $employee[0];
+            // cek user scan dihalaman registrasi atau lunch
+            if ($request->scan == 1) {
+                // cek karyawan sudah ada di tabel trn_registrasi atau belum
+                if (empty($employeeExist)) {
+                    return response()->json([
+                        'success' => true,
+                        'data' => [
+                            'id' => $employee->employee_id,
+                            'nama' => $employee->full_name,
+                            'department' => $employee->department_name,
+                        ],
+                    ]);
+                } else {
+                    return response()->json([
+                        'success' => false,
+                        'data' => [
+                            'message' => 'Karyawan sudah registrasi.',
+                            'nama' => $employee->full_name,
+                            'department' => $employee->department_name,
+                        ],
+                    ]);
+                }
+            } else {
+                // scan di halaman lunch
+                return response()->json([
+                    'success' => true,
+                    'data' => [
+                        'id' => $employee->employee_id,
+                        'nama' => $employee->full_name,
+                        'department' => $employee->department_name,
+                    ],
+                ]);
+            }
+        } else {
             return response()->json([
-                'success' => true,
+                'success' => false,
                 'data' => [
-                    'id' => $employee->employee_id,
-                    'nama' => $employee->full_name,
-                    'department' => $employee->department_name,
+                    'message' => 'Data karyawan tidak ditemukan.',
                 ],
             ]);
         }
 
-        return response()->json([
-            'success' => false,
-            'message' => 'Karyawan tidak ditemukan.',
-        ]);
+        // // data karyawan ada, karyawan belum terdaftar di trn_registration, scan di halaman registrasi
+        // if (!empty($employee) && empty($employeeExist) && $request->scan == 1) {
+        //     $employee = $employee[0];
+        //     return response()->json([
+        //         'success' => true,
+        //         'data' => [
+        //             'id' => $employee->employee_id,
+        //             'nama' => $employee->full_name,
+        //             'department' => $employee->department_name,
+        //         ],
+        //     ]);
+        // }
+        // // data karyawan tidak ada, karyawan sudah terdaftar di trn_registration, scan di halaman registrasi
+        // else if (!empty($employee) && !empty($employeeExist) && $request->scan == 1) {
+        //     $employee = $employee[0];
+        //     return response()->json([
+        //         'success' => false,
+        //         'data' => [
+        //             'message' => 'Karyawan sudah registrasi.',
+        //             'nama' => $employee->full_name,
+        //             'department' => $employee->department_name,
+        //         ],
+        //     ]);
+        // }
+        // // data karyawan ada, scan di halaman lunch
+        // else if (!empty($employee) && $request->scan == 1) {
+        //     $employee = $employee[0];
+        //     return response()->json([
+        //         'success' => true,
+        //         'data' => [
+        //             'id' => $employee->employee_id,
+        //             'nama' => $employee->full_name,
+        //             'department' => $employee->department_name,
+        //         ],
+        //     ]);
+        // }
+
+        // return response()->json([
+        //     'success' => false,
+        //     'data' => [
+        //         'message' => 'Data karyawan tidak ditemukan.',
+        //     ],
+        // ]);
     }
 
     public function scanRegister(Request $request)

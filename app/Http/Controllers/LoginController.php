@@ -26,6 +26,8 @@ class LoginController extends Controller
     {
         $request->validate([
             'captcha' => 'required|captcha'
+        ], [
+            'captcha.captcha' => 'Captcha tidak valid!'
         ]);
         $adServers = ["ldap://gysdc01.gyssteel.com", "ldap://gysdc02.gyssteel.com"];
         $username = $request->username;
@@ -54,6 +56,10 @@ class LoginController extends Controller
 
         $query = DB::table('mst_users')->where('is_active', 0)->where('username', $username)->first();
 
+        if (!$query) {
+            return back()->with('error', 'Kamu tidak memiliki akses!');
+        }
+
         if ($ldapConnected) {
             $filter = "(sAMAccountName=$username)";
             $result = @ldap_search($ldapConnection, "dc=gyssteel,dc=com", $filter);
@@ -76,11 +82,6 @@ class LoginController extends Controller
                         'start' => time(),
                         'expire' => time() + 300,
                     ]);
-
-                    // Cek jika pengguna ditemukan di database
-                    if (!$query) {
-                        return back()->with('error', 'Kamu tidak memiliki akses!');
-                    }
 
                     // Menyimpan informasi pengguna di session
                     $infoUser = array("admin" => "true", "type" => $query->usr_access, "nama" => $query->display_name, "email" => $query->email, "id" => $query->id);
@@ -108,7 +109,7 @@ class LoginController extends Controller
             return redirect()->route('register');
         }
 
-        return back()->withErrors(['message' => 'Username atau password salah!']);
+        return back()->with(['error' => 'Username atau password salah!']);
     }
 
     public function logout(Request $request)
