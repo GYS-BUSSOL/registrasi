@@ -34,24 +34,25 @@
 
 <body>
     <div class="d-flex align-items-center justify-content-center text-white"
-        style="background: url({{ asset('assets/images/background/auth1.jpg') }}) center/cover no-repeat; height: 100vh;">
+        style="background: url({{ asset('assets/images/background/undian3.png') }}) center/cover no-repeat; height: 100vh;">
         <div class="container">
             <div class="row">
-                <div class="col-md-5 col-sm-12 mx-auto">
-                    <div class="card pt-4">
-                        <div class="card-body">
+                <div class="col-lg-6 col-sm-12 mx-auto">
+                    <div class="card pt-4" style="background-color: rgba(165, 251, 221, 0.3);">
+                        <div class="card-body ">
                             <div class="text-center mb-5">
                                 <div class="card-body">
                                     <!-- Display Random Number -->
-                                    <div id="random-number" class="display-3 text-primary text-center fw-bold">000000000
+                                    <div id="random-number" class="display-3 text-white text-center fw-bold"
+                                        style="font-size: 90px;">
+                                        000000000
                                     </div>
 
                                     <!-- Display Result -->
                                     <div id="result" class="mt-4 text-center"></div>
-
                                     <!-- Buttons -->
                                     <div class="text-center mt-4">
-                                        <button id="start-button" class="btn btn-primary btn-lg me-2"
+                                        <button id="start-button" class="btn btn-success btn-lg me-2"
                                             onclick="startDraw()">Mulai</button>
                                         <button id="stop-button" class="btn btn-danger btn-lg" onclick="stopDraw()"
                                             disabled>Berhenti</button>
@@ -141,13 +142,12 @@
 
                     if (response.status === 'success') {
                         resultElement.innerHTML = `
-                <div class="alert alert-success mt-3">
-                    <h3>${response.message}</h3>
-                    <p>Pemenang: <strong>${winner.full_name}</strong></p>
-                    <p>ID Karyawan: <strong>${winner.employee_id}</strong></p>
-                    <p>Department: <strong>${winner.department_name}</strong></p>
-                </div>
-            `;
+                        <div class="alert alert-success mt-3">
+                            <h2 style="color: white;">${response.message}</h2>
+                            <h5><strong style="color: white;">${winner.full_name}</strong></h5>
+                            <h5><strong style="color: white;">${winner.department_name}</strong></h5>
+                        </div>
+                        `;
                     }
                 },
                 error: function(xhr, status, error) {
