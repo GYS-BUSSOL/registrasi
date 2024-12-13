@@ -75,15 +75,14 @@
                 </div>
                 <div class="modal-footer">
                     <button id="confirm" type="submit" class="btn btn-primary ml-1" data-bs-dismiss="modal">
-                        <i class="bx bx-check d-block d-sm-none"></i>
-                        <span class="d-none d-sm-block">OK</span>
+                        <span class="d-sm-block">OK</span>
                     </button>
                 </div>
             </div>
         </div>
     </div>
     <!-- Modal Popup Karyawan sudah Registrasi dan Karyawan tidak ditemukan-->
-    <div class="modal fade text-left" id="popUpFail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel120"
+    <div class="modal fade text-left" id="popUpInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel120"
         aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
@@ -92,14 +91,11 @@
                         Info
                     </h5>
                 </div>
-                <div class="modal-body">
-                    <p><span id="message"></span></p>
-                    <p><span id="fail-nama"></span> - <span id="fail-department"></span></p>
+                <div class="modal-body" id="info">
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary ml-1" data-bs-dismiss="modal">
-                        <i class="bx bx-check d-block d-sm-none"></i>
-                        <span class="d-none d-sm-block">OK</span>
+                        <span class="d-sm-block">OK</span>
                     </button>
                 </div>
             </div>
@@ -156,6 +152,7 @@
 
         function getData(qrCode) {
             console.log(qrCode)
+            const info = document.getElementById('info');
             let csrfToken = $('input[name="_token"]').val();
             $.ajax({
                 url: '/cek-karyawan', // Route ke controller
@@ -178,26 +175,29 @@
                         // Konfirmasi untuk menyimpan data
                         $('#confirm').on('click', function() {
                             $.ajax({
-                                url: '/', // Route untuk menyimpan ke tabel register
+                                url: '/lunch', // Route untuk menyimpan ke tabel register
                                 method: 'POST',
                                 data: {
                                     _token: csrfToken,
                                     employee_id: response.data.id
                                 },
                                 success: function(saveResponse) {
-                                    alert(saveResponse.message);
-                                    location
-                                        .reload(); // Muat ulang halaman jika perlu
+                                    info.innerHTML = `
+                                    <p>${saveResponse.message}</p>
+                                    `;
+                                    // Tampilkan modal
+                                    $('#popUpInfo').modal('show');
                                 }
                             });
                         });
                     } else {
                         // Jika karyawan sudah registrasi atau karyawan tidak ditemukan tampilkan popup
-                        $('#message').text(response.data.message);
-                        $('#fail-nama').text(response.data.nama);
-                        $('#fail-department').text(response.data.department);
+                        info.innerHTML = `
+                                    <p>${response.data.message}</p>
+                                    <p>${response.data.nama} - ${response.data.department}</p>
+                                    `;
                         // Tampilkan modal
-                        $('#popUpFail').modal('show');
+                        $('#popUpInfo').modal('show');
                     }
                 }
             });
