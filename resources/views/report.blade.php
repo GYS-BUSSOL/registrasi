@@ -5,8 +5,7 @@
 @section('content')
 
     <div class="page-title">
-        <h3>User</h3>
-        <p class="text-subtitle text-muted">List Data User </p>
+        <h3>Registrasi</h3>
     </div>
 
 
@@ -14,7 +13,7 @@
         <div class="card-header">
             <div class="col-12">
                 <div class="row">
-                    <div class="text-left">User <br>
+                    <div class="text-left">Data Registrasi Karyawan<br>
                         <hr>
                     </div>
                 </div>
@@ -61,5 +60,22 @@
             </div>
         </div>
     </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#list').DataTable({
+                dom: 'Blfrtip',
+                buttons: [{
+                    extend: 'excel',
+                    title: 'Data Registrasi Karyawan',
+                    text: 'Export data ke Excel',
+                    exportOptions: {
+                        columns: [':visible'], // Ekspor hanya kolom yang terlihat
+                    },
+                }, ],
+                responsive: true, // Tambahkan jika tabel perlu responsif
+            });
+        });
+    </script>
 
 @endsection

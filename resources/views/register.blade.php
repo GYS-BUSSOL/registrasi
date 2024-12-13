@@ -34,7 +34,7 @@
                                         @csrf
                                         <div class="form-group col-md-4" style="margin-left: 10px;">
                                             <input type="text" class="form-control" name="qr_number" id='qr_number'
-                                                placeholder="Masukan Nomor Barcode" required />
+                                                placeholder="Masukan NIK Karyawan" required />
                                         </div>
                                         <div>
                                             <button type="submit" class="btn btn-primary">Search</button>
@@ -188,6 +188,9 @@
                                     `;
                                     // Tampilkan modal
                                     $('#popUpInfo').modal('show');
+                                    $('#popUpInfo').on('hidden.bs.modal', function() {
+                                        location.reload(); // Refresh halaman
+                                    });
                                 }
                             });
                         });
@@ -199,6 +202,9 @@
                                     `;
                         // Tampilkan modal
                         $('#popUpInfo').modal('show');
+                        $('#popUpInfo').on('hidden.bs.modal', function() {
+                            location.reload(); // Refresh halaman
+                        });
                     }
                 }
             });
