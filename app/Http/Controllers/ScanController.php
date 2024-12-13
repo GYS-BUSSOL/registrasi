@@ -140,7 +140,9 @@ class ScanController extends Controller
     }
     public function report()
     {
-        $users = DB::select('SELECT *, mst_dbox_employee.full_name, mst_dbox_employee.department_name FROM trn_registration INNER JOIN mst_dbox_employee ON trn_registration.employee_id = mst_dbox_employee.employee_id');
+        $users = DB::select('SELECT *, mst_dbox_employee.full_name, mst_dbox_employee.department_name FROM trn_registration 
+        INNER JOIN mst_dbox_employee ON trn_registration.employee_id = mst_dbox_employee.employee_id 
+        ORDER BY mst_dbox_employee.full_name');
         // dd($users);
         return view('report', ['users' => $users]);
     }

@@ -63,14 +63,13 @@
 </style>
 
 <body>
-    <div id="auth">
-
+    <div id="auth" class="align-items-center justify-content-center d-flex">
         <div class="container">
             <div class="row">
                 <div class="col-md-5 col-sm-12 mx-auto">
                     <div class="card pt-4">
                         <div class="card-body">
-                            <div class="text-center mb-5">
+                            <div class="text-center mb-4">
                                 <img src="{{ asset('assets/images/GYSLogo.png') }}" height="55" class='mb-4'>
                                 <h3>Sign In</h3>
                             </div>
@@ -115,13 +114,18 @@
                                     class="form-group d-flex position-relative align-items-center justify-content-center">
                                     <div class="position-relative captcha">
                                         <span class="mx-2">{!! captcha_img() !!}</span>
+                                    </div>
+                                </div>
+                                <div
+                                    class="form-group d-flex position-relative align-items-center justify-content-center">
+                                    <div class="position-relative">
                                         <button type="button" class="btn btn-warning reload mx-2"
                                             id="reload">&#x21bb;
                                             Refresh</button>
                                     </div>
                                 </div>
                                 <div class="clearfix">
-                                    <button type="submit" class="btn btn-primary float-end">Login</button>
+                                    <button type="submit" class="btn btn-primary float-end mt-4">Login</button>
                                 </div>
                             </form>
                         </div>
