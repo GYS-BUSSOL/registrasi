@@ -51,7 +51,7 @@
                                     <!-- Display Result -->
                                     <div id="result" class="mt-4 text-center"></div>
                                     <!-- Buttons -->
-                                    <div class="text-center mt-4">
+                                    <div class="text-center mt-4" id="tombol">
                                         <button id="start-button" class="btn btn-success btn-lg me-2"
                                             onclick="startDraw()">Mulai</button>
                                         <button id="stop-button" class="btn btn-danger btn-lg" onclick="stopDraw()"
@@ -148,6 +148,8 @@
                             <h5><strong style="color: white;">${winner.department_name}</strong></h5>
                         </div>
                         `;
+                        $('#tombol').hide();
+
                     }
                 },
                 error: function(xhr, status, error) {
