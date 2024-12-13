@@ -3,8 +3,10 @@
 
 <head>
     <meta charset="utf-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Login</title>
+    <title>Undian</title>
 
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.css') }}">
 
@@ -31,7 +33,6 @@
 </head>
 
 <body>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <div class="d-flex align-items-center justify-content-center text-white"
         style="background: url({{ asset('assets/images/background/auth1.jpg') }}) center/cover no-repeat; height: 100vh;">
         <div class="container">
@@ -51,8 +52,7 @@
                                     <!-- Buttons -->
                                     <div class="text-center mt-4">
                                         <button id="start-button" class="btn btn-primary btn-lg me-2"
-                                            onclick="startDraw()">Mulai
-                                            Undian</button>
+                                            onclick="startDraw()">Mulai</button>
                                         <button id="stop-button" class="btn btn-danger btn-lg" onclick="stopDraw()"
                                             disabled>Berhenti</button>
                                     </div>
@@ -64,121 +64,102 @@
             </div>
         </div>
 
-
-        {{-- <div class="card">
-            <div class="card-header">
-                <div class="col-12">
-                    <div class="row">
-                        <div class="text-left"><br>
-                            <hr>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <!-- Display Random Number -->
-                    <div id="random-number" class="display-3 text-primary text-center fw-bold">000000000</div>
-
-                    <!-- Display Result -->
-                    <div id="result" class="mt-4 text-center"></div>
-
-                    <!-- Buttons -->
-                    <div class="text-center mt-4">
-                        <button id="start-button" class="btn btn-primary btn-lg me-2" onclick="startDraw()">Mulai
-                            Undian</button>
-                        <button id="stop-button" class="btn btn-danger btn-lg" onclick="stopDraw()"
-                            disabled>Berhenti</button>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
     </div>
 
     <script>
-        let participants = []; // Array untuk menyimpan ID karyawan
-        let interval; // Interval untuk animasi pengacakan
-        let isRunning = false; // Status animasi
-        let currentRandomNumber = null; // Menyimpan nomor yang terakhir ditampilkan
+        let participants = [];
+        let interval;
+        let isRunning = false;
+        let currentRandomNumber = null;
 
         // Ambil data ID karyawan dari server
         function fetchParticipants() {
-            return axios.get('/participants')
-                .then(response => {
-                    participants = response.data; // Simpan ID karyawan
-                })
-                .catch(error => {
+            return $.ajax({
+                url: '/participants',
+                method: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    participants = response;
+                    console.log(participants)
+                },
+                error: function(xhr, status, error) {
                     console.error('Gagal mengambil data peserta:', error);
-                });
+                }
+            });
         }
-        // console.log(participants)
+
 
         // Mulai pengacakan
         function startDraw() {
-            if (isRunning || participants.length === 0) return; // Jangan mulai jika sudah berjalan atau data kosong
+            if (isRunning || participants.length === 0) return;
 
             const randomNumberElement = document.getElementById('random-number');
             const resultElement = document.getElementById('result');
-            resultElement.innerHTML = ''; // Bersihkan hasil sebelumnya
+            resultElement.innerHTML = '';
 
             isRunning = true;
-            document.getElementById('start-button').disabled = true; // Nonaktifkan tombol Mulai
-            document.getElementById('stop-button').disabled = false; // Aktifkan tombol Berhenti
+            document.getElementById('start-button').disabled = true;
+            document.getElementById('stop-button').disabled = false;
 
             // Mulai animasi pengacakan angka
             interval = setInterval(() => {
                 const randomIndex = Math.floor(Math.random() * participants.length);
-                currentRandomNumber = participants[randomIndex]; // Simpan nomor terakhir
-                randomNumberElement.textContent = currentRandomNumber; // Tampilkan ID karyawan acak
-            }, 50); // Ubah angka setiap 50ms
+                currentRandomNumber = participants[randomIndex];
+                randomNumberElement.textContent = currentRandomNumber;
+            }, 50);
         }
 
         // Hentikan pengacakan
         function stopDraw() {
             if (!isRunning) return; // Jangan berhenti jika tidak berjalan
 
-            clearInterval(interval); // Hentikan animasi
+            clearInterval(interval);
             isRunning = false;
-            document.getElementById('start-button').disabled = false; // Aktifkan tombol Mulai
-            document.getElementById('stop-button').disabled = true; // Nonaktifkan tombol Berhenti
+            document.getElementById('start-button').disabled = false;
+            document.getElementById('stop-button').disabled = true;
 
             const randomNumberElement = document.getElementById('random-number');
             const resultElement = document.getElementById('result');
 
-            // Kirim permintaan ke server untuk mendapatkan pemenang
-            axios.post('/draw', {
-                    employee_id: currentRandomNumber
-                })
-                .then(response => {
-                    const winner = response.data.winner;
-                    randomNumberElement.textContent = winner.employee_id; // Tampilkan ID pemenang
-                    if (response.data.status == 'success') {
-                        resultElement.innerHTML = `
-                        <div class="alert alert-success mt-3">
-                            <h3>${response.data.message}</h3>
-                            <p>Pemenang: <strong>${winner.full_name}</strong></p>
-                            <p>ID Karyawan: <strong>${winner.employee_id}</strong></p>
-                            <p>Department: <strong>${winner.department_name}</strong></p>
-                        </div>
-                    `;
-                    } else {
-                        resultElement.innerHTML = `
-                        <div class="alert alert-danger mt-3">
-                            <h3>${response.data.message}</h3>
-                            <p>Pemenang: <strong>${winner.full_name}</strong></p>
-                            <p>ID Karyawan: <strong>${winner.employee_id}</strong></p>
-                            <p>Department: <strong>${winner.department_name}</strong></p>
-                        </div>
-                    `;
-                    }
+            // ambil data karyawan lagi
+            fetchParticipants();
 
-                })
-                .catch(error => {
+            // Kirim permintaan ke server untuk mendapatkan pemenang
+            $.ajax({
+                url: '/draw',
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: {
+                    employee_id: currentRandomNumber
+                },
+                dataType: 'json',
+                success: function(response) {
+                    const winner = response.winner;
+                    randomNumberElement.textContent = winner.employee_id; // Tampilkan ID pemenang
+
+                    if (response.status === 'success') {
+                        resultElement.innerHTML = `
+                <div class="alert alert-success mt-3">
+                    <h3>${response.message}</h3>
+                    <p>Pemenang: <strong>${winner.full_name}</strong></p>
+                    <p>ID Karyawan: <strong>${winner.employee_id}</strong></p>
+                    <p>Department: <strong>${winner.department_name}</strong></p>
+                </div>
+            `;
+                    }
+                },
+                error: function(xhr, status, error) {
                     randomNumberElement.textContent = '000000000';
                     resultElement.innerHTML = `
-                        <div class="alert alert-danger mt-3">
-                            <p>${error.response.data.message}</p>
-                        </div>
-                    `;
-                });
+            <div class="alert alert-danger mt-3">
+                <p>${xhr.responseJSON.message}</p>
+            </div>
+        `;
+                }
+            });
+
         }
 
         // Ambil data peserta saat halaman dimuat

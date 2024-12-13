@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use SebastianBergmann\Type\TrueType;
 
 class DoorprizeController extends Controller
 {
@@ -16,7 +17,9 @@ class DoorprizeController extends Controller
     public function getParticipants()
     {
         // $participants = DB::table('mst_dbox_employee')->pluck('employee_id'); // Sample data
-        $participants = DB::table('trn_registration')->pluck('employee_id');
+        $employees = DB::select('SELECT employee_id FROM trn_registration WHERE employee_id NOT IN (SELECT employee_id FROM trn_undian)');
+        $participants = collect($employees)->pluck('employee_id');
+
         if ($participants->isEmpty()) {
             return response()->json(['message' => 'Tidak ada peserta terdaftar.'], 404);
         }
@@ -34,16 +37,19 @@ class DoorprizeController extends Controller
 
         if (!empty($checkWinner)) {
             return response()->json([
-                'status' => 'fail',
-                'message' => 'Pemenang sudah ada',
-                'winner' => $checkWinner[0]
+                'success' => false,
+                'data' => [
+                    'message' => 'Pemenang sudah ada',
+                    'winner' => $checkWinner[0]
+                ],
             ]);
         }
         DB::insert('INSERT INTO trn_undian (employee_id, created_at, created_by) VALUES (?,?,?)', [$request->employee_id, now()->format('Y-m-d H:i:s'), session('id')]);
         return response()->json([
+            'success' => true,
             'status' => 'success',
             'message' => 'Selamat Kepada:',
-            'winner' => $winner[0]
+            'winner' => $winner[0],
         ]);
     }
 }
