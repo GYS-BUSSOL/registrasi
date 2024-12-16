@@ -65,12 +65,12 @@
                         <div class="col-6">
                             <ul>
                                 <p>Nama: <strong><span id="nama"></span></strong> </p>
-                                <p>ID Karyawan: <strong><span id="id"></span></strong></p>
                                 <p>Department: <strong><span id="department"></span></strong> </p>
                             </ul>
                         </div>
                         <div class="col-6">
-                            <img src="{{ asset('assets/images/avatar/avatar-s-1.png') }}" alt="Foto Karyawan">
+                            <p>ID Karyawan: <strong><span id="id"></span></strong></p>
+                            <p>Ukuran Baju: <strong><span id="size"></span></strong></p>
                         </div>
                     </div>
                 </div>
@@ -169,6 +169,7 @@
                         $('#id').text(response.data.id);
                         $('#nama').text(response.data.nama);
                         $('#department').text(response.data.department);
+                        $('#size').text(response.data.size);
                         // Tampilkan modal
                         $('#popUp').modal('show');
 

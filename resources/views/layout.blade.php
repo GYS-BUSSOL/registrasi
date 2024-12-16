@@ -73,27 +73,44 @@
                 <div class="sidebar-menu">
                     <ul class="menu">
                         <li class='sidebar-title'>Pilihan Menu</li>
+                        @if (session('type') == 'admin')
+                            <li class="sidebar-item">
+                                <a href="{{ route('register') }}" class='sidebar-link'>
+                                    <span>Registration</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a href="{{ route('report') }}" class='sidebar-link'>
+                                    <span>Report</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a href="{{ route('doorprize') }}" target="_blank" class='sidebar-link'>
+                                    <span>Undian</span>
+                                </a>
+                            </li>
+                        @endif
 
-                        <li class="sidebar-item">
-                            <a href="{{ route('register') }}" class='sidebar-link'>
-                                <span>Registration</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="{{ route('lunch') }}" class='sidebar-link'>
-                                <span>Lunch</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="{{ route('report') }}" class='sidebar-link'>
-                                <span>Report</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="{{ route('doorprize') }}" target="_blank" class='sidebar-link'>
-                                <span>Undian</span>
-                            </a>
-                        </li>
+                        @if (session('type') == 'hr')
+                            <li class="sidebar-item">
+                                <a href="{{ route('register') }}" class='sidebar-link'>
+                                    <span>Registration</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a href="{{ route('report') }}" class='sidebar-link'>
+                                    <span>Report</span>
+                                </a>
+                            </li>
+                        @endif
+                        {{-- @if (session('type') == 'operator')
+                            <li class="sidebar-item">
+                                <a href="{{ route('doorprize') }}" target="_blank" class='sidebar-link'>
+                                    <span>Undian</span>
+                                </a>
+                            </li>
+                        @endif --}}
+
                     </ul>
                 </div>
                 <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>

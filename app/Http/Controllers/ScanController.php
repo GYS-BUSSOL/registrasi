@@ -45,7 +45,6 @@ class ScanController extends Controller
                         ],
                     ]);
                 } else if ($employeeExist->is_flag == 1 || $employeeExist->is_flag == 2 && $request->scan == 1) {
-                    // scan lunch berhasil
                     return response()->json([
                         'success' => false,
                         'data' => [
@@ -72,6 +71,7 @@ class ScanController extends Controller
                             'id' => $employee->employee_id,
                             'nama' => $employee->full_name,
                             'department' => $employee->department_name,
+                            'size' => $employee->size,
                         ],
                     ]);
                 } else {

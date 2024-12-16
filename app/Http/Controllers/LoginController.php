@@ -90,7 +90,11 @@ class LoginController extends Controller
                     // Login dengan Auth
                     Auth::loginUsingId($query->id); // Login dengan ID user
 
-                    return redirect()->route('register');
+                    if ($query->usr_access == 'admin' || $query->usr_access == 'hr') {
+                        return redirect()->route('register');
+                    } else {
+                        return redirect()->route('doorprize');
+                    }
                 }
             }
 
@@ -106,7 +110,11 @@ class LoginController extends Controller
             // Login dengan Auth
             Auth::loginUsingId($query->id); // Login dengan ID user
 
-            return redirect()->route('register');
+            if ($query->usr_access == 'admin' || $query->usr_access == 'hr') {
+                return redirect()->route('register');
+            } else {
+                return redirect()->route('doorprize');
+            }
         }
 
         return back()->with(['error' => 'Username atau password salah!']);
