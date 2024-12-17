@@ -116,7 +116,6 @@ class ScanController extends Controller
             'success' => true,
             'message' => 'Registrasi Berhasil',
         ]);
-        // return redirect()->route('register')->with('success', true)->with('msg', 'Registrasi Berhasil');
     }
     public function scanLunch(Request $request)
     {
@@ -140,9 +139,7 @@ class ScanController extends Controller
     }
     public function report()
     {
-        $users = DB::select('SELECT *, mst_dbox_employee.full_name, mst_dbox_employee.department_name FROM trn_registration 
-        INNER JOIN mst_dbox_employee ON trn_registration.employee_id = mst_dbox_employee.employee_id 
-        ORDER BY mst_dbox_employee.full_name');
+        $users = DB::select('EXEC [dbo].[sp_ListEmployeeDay]');
         // dd($users);
         return view('report', ['users' => $users]);
     }
