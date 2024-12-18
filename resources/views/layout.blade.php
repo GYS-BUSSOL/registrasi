@@ -81,7 +81,12 @@
                             </li>
                             <li class="sidebar-item">
                                 <a href="{{ route('report') }}" class='sidebar-link'>
-                                    <span>Report</span>
+                                    <span>Report Registrasi</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a href="{{ route('report-undian') }}" class='sidebar-link'>
+                                    <span>Report Undian</span>
                                 </a>
                             </li>
                             <li class="sidebar-item">
@@ -99,7 +104,12 @@
                             </li>
                             <li class="sidebar-item">
                                 <a href="{{ route('report') }}" class='sidebar-link'>
-                                    <span>Report</span>
+                                    <span>Report Registrasi</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a href="{{ route('report-undian') }}" class='sidebar-link'>
+                                    <span>Report Undian</span>
                                 </a>
                             </li>
                         @endif

@@ -1,6 +1,8 @@
-@extends('layout')
+@can('access-admin-or-hr')
+    @extends('layout')
 
-@section('title', 'Scan Registrasi')
+    @section('title', 'Scan Registrasi')
+
 
 @section('content')
 
@@ -212,3 +214,4 @@
         }
     </script>
 @endsection
+@endcan

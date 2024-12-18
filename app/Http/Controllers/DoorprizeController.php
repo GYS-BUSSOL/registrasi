@@ -4,19 +4,21 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use SebastianBergmann\Type\TrueType;
+use Illuminate\Support\Facades\Gate;
 
 class DoorprizeController extends Controller
 {
 
     public function index()
     {
+        if (Gate::denies('access-admin-or-operator')) {
+            abort(403, 'Anda tidak memiliki akses Admin atau Operator.');
+        }
         return view('doorprize');
     }
 
     public function getParticipants()
     {
-        // $participants = DB::table('mst_dbox_employee')->pluck('employee_id'); // Sample data
         $employees = DB::select('SELECT employee_id FROM trn_registration WHERE employee_id NOT IN (SELECT employee_id FROM trn_undian)');
         $participants = collect($employees)->pluck('employee_id');
 
@@ -29,10 +31,11 @@ class DoorprizeController extends Controller
 
     public function draw(Request $request)
     {
-        // $winner = DB::select('SELECT employee_id, full_name, department_name FROM mst_dbox_employee WHERE employee_id = ?', [$request->employee_id]); // sample data
-        $winner = DB::select('SELECT trn_registration.employee_id, mst_dbox_employee.full_name, mst_dbox_employee.department_name FROM trn_registration INNER JOIN mst_dbox_employee ON trn_registration.employee_id = mst_dbox_employee.employee_id WHERE trn_registration.employee_id = ?', [$request->employee_id]);
+        $winner = DB::select('SELECT trn_registration.employee_id, tmp_employee_day.full_name, tmp_employee_day.department_name FROM trn_registration 
+        INNER JOIN tmp_employee_day ON trn_registration.employee_id = tmp_employee_day.employee_id 
+        WHERE trn_registration.employee_id = ?', [$request->employee_id]);
 
-        $checkWinner = DB::select('SELECT * FROM trn_undian INNER JOIN mst_dbox_employee ON trn_undian.employee_id = mst_dbox_employee.employee_id WHERE trn_undian.employee_id = ?', [$request->employee_id]);
+        $checkWinner = DB::select('SELECT * FROM trn_undian INNER JOIN tmp_employee_day ON trn_undian.employee_id = tmp_employee_day.employee_id WHERE trn_undian.employee_id = ?', [$request->employee_id]);
 
 
         if (!empty($checkWinner)) {
@@ -51,5 +54,15 @@ class DoorprizeController extends Controller
             'message' => 'Selamat Kepada:',
             'winner' => $winner[0],
         ]);
+    }
+
+    public function report()
+    {
+        $users = DB::select('SELECT *, tmp_employee_day.full_name, tmp_employee_day.department_name  FROM trn_undian 
+        INNER JOIN tmp_employee_day ON trn_undian.employee_id = tmp_employee_day.employee_id');
+        if (Gate::denies('access-admin-or-hr')) {
+            abort(403, 'Anda tidak memiliki akses admin atau HR.');
+        }
+        return view('reportUndian', ['users' => $users]);
     }
 }

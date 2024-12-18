@@ -6,7 +6,7 @@
 @section('content')
 
     <div class="page-title">
-        <h3>Registrasi</h3>
+        <h3>Undian</h3>
     </div>
 
 
@@ -14,7 +14,7 @@
         <div class="card-header">
             <div class="col-12">
                 <div class="row">
-                    <div class="text-left">Data Registrasi Employee Day<br>
+                    <div class="text-left">Data Pemenang Undian Employee Day<br>
                         <hr>
                     </div>
                 </div>
@@ -28,7 +28,6 @@
                             <th>Nama</th>
                             <th>Department</th>
                             <th>Tanggal & Waktu</th>
-                            <th>Keterangan</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -41,14 +40,7 @@
                                 <td>{{ $user->employee_id }}</td>
                                 <td>{{ $user->full_name }}</td>
                                 <td>{{ $user->department_name }}</td>
-                                <td>{{ $user->updated_at }}</td>
-                                <td>
-                                    @if ($user->is_flag == 1)
-                                        Registrasi
-                                    @else
-                                        Lunch
-                                    @endif
-                                </td>
+                                <td>{{ $user->created_at }}</td>
                                 @php
                                     $i++;
                                 @endphp
@@ -68,7 +60,7 @@
                 dom: 'Blfrtip',
                 buttons: [{
                     extend: 'excel',
-                    title: 'Data Registrasi Employee Day',
+                    title: 'Data Pemenang Undian Employee Day',
                     text: 'Export data ke Excel',
                     exportOptions: {
                         columns: [':visible'], // Ekspor hanya kolom yang terlihat
@@ -78,6 +70,7 @@
             });
         });
     </script>
+
 
 @endsection
 @endcan

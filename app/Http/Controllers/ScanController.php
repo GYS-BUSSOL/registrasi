@@ -4,12 +4,16 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class ScanController extends Controller
 {
 
     public function showRegister()
     {
+        if (Gate::denies('access-admin-or-hr')) {
+            abort(403, 'Anda tidak memiliki akses admin atau HR.');
+        }
         return view('register');
     }
 
@@ -140,7 +144,9 @@ class ScanController extends Controller
     public function report()
     {
         $users = DB::select('EXEC [dbo].[sp_ListEmployeeDay]');
-        // dd($users);
+        if (Gate::denies('access-admin-or-hr')) {
+            abort(403, 'Anda tidak memiliki akses admin atau HR.');
+        }
         return view('report', ['users' => $users]);
     }
 }

@@ -16,10 +16,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/', [ScanController::class, 'scanRegister'])->name('register.post');
     Route::post('/cek-karyawan', [ScanController::class, 'checkEmployee']);
 
-    Route::get('/lunch', [ScanController::class, 'showLunch'])->name('lunch');
-    Route::post('/lunch', [ScanController::class, 'scanLunch'])->name('lunch.post');
+    // Route::get('/lunch', [ScanController::class, 'showLunch'])->name('lunch');
+    // Route::post('/lunch', [ScanController::class, 'scanLunch'])->name('lunch.post');
 
     Route::get('/report', [ScanController::class, 'report'])->name('report');
+    Route::get('/report-undian', [DoorprizeController::class, 'report'])->name('report-undian');
 
     Route::get('/doorprize', [DoorprizeController::class, 'index'])->name('doorprize');
     Route::get('/participants', [DoorprizeController::class, 'getParticipants']);
