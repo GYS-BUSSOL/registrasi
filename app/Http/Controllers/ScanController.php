@@ -76,6 +76,8 @@ class ScanController extends Controller
                             'nama' => $employee->full_name,
                             'department' => $employee->department_name,
                             'size' => $employee->size,
+                            'group' => $employee->group,
+                            'warna_group' => $employee->warna_group,
                         ],
                     ]);
                 } else {

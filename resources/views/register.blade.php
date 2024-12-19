@@ -67,12 +67,14 @@
                         <div class="col-6">
                             <ul>
                                 <p>Nama: <strong><span id="nama"></span></strong> </p>
+                                <p>ID Karyawan: <strong><span id="id"></span></strong></p>
                                 <p>Department: <strong><span id="department"></span></strong> </p>
                             </ul>
                         </div>
                         <div class="col-6">
-                            <p>ID Karyawan: <strong><span id="id"></span></strong></p>
                             <p>Ukuran Baju: <strong><span id="size"></span></strong></p>
+                            <p>Group: <strong><span id="group"></span></strong></p>
+                            <p>Warna Group: <strong><span id="warna-group"></span></strong></p>
                         </div>
                     </div>
                 </div>
@@ -172,6 +174,8 @@
                         $('#nama').text(response.data.nama);
                         $('#department').text(response.data.department);
                         $('#size').text(response.data.size);
+                        $('#group').text(response.data.group);
+                        $('#warna-group').text(response.data.warna_group);
                         // Tampilkan modal
                         $('#popUp').modal('show');
 
