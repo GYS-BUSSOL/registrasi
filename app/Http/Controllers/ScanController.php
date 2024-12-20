@@ -32,64 +32,29 @@ class ScanController extends Controller
 
         $employeeExist = DB::select('SELECT * FROM trn_registration WHERE employee_id = ?', [$employee_id]);
 
-        // cek data karyawan ada atau tidak
-        if (!empty($employee)) {
+        if (!empty($employee)) { // data karyawan ada
             $employee = $employee[0];
-            // cek apakah data karyawan sudah ada di tabel trn_registration
             if (!empty($employeeExist)) { // ada di trn_registration 
-                $employeeExist = $employeeExist[0];
-                if ($employeeExist->is_flag == 1 && $request->scan == 2) {
-                    // scan lunch berhasil
-                    return response()->json([
-                        'success' => true,
-                        'data' => [
-                            'id' => $employee->employee_id,
-                            'nama' => $employee->full_name,
-                            'department' => $employee->department_name,
-                        ],
-                    ]);
-                } else if ($employeeExist->is_flag == 1 || $employeeExist->is_flag == 2 && $request->scan == 1) {
-                    return response()->json([
-                        'success' => false,
-                        'data' => [
-                            'message' => 'Karyawan sudah registrasi.',
-                            'nama' => $employee->full_name,
-                            'department' => $employee->department_name,
-                        ],
-                    ]);
-                } else if ($employeeExist->is_flag == 2 && $request->scan == 2) {
-                    return response()->json([
-                        'success' => false,
-                        'data' => [
-                            'message' => 'Karyawan sudah scan lunch.',
-                            'nama' => $employee->full_name,
-                            'department' => $employee->department_name,
-                        ],
-                    ]);
-                }
-            } else {
-                if ($request->scan == 1) {
-                    return response()->json([
-                        'success' => true,
-                        'data' => [
-                            'id' => $employee->employee_id,
-                            'nama' => $employee->full_name,
-                            'department' => $employee->department_name,
-                            'size' => $employee->size,
-                            'group' => $employee->group,
-                            'warna_group' => $employee->warna_group,
-                        ],
-                    ]);
-                } else {
-                    return response()->json([
-                        'success' => false,
-                        'data' => [
-                            'message' => 'Karyawan belum registrasi.',
-                            'nama' => $employee->full_name,
-                            'department' => $employee->department_name,
-                        ],
-                    ]);
-                }
+                return response()->json([
+                    'success' => false,
+                    'data' => [
+                        'message' => 'Karyawan sudah registrasi.',
+                        'nama' => $employee->full_name,
+                        'department' => $employee->department_name,
+                    ],
+                ]);
+            } else { // tidak ada di trn_registration
+                return response()->json([
+                    'success' => true,
+                    'data' => [
+                        'id' => $employee->employee_id,
+                        'nama' => $employee->full_name,
+                        'department' => $employee->department_name,
+                        'size' => $employee->size,
+                        'group' => $employee->group,
+                        'warna_group' => $employee->warna_group,
+                    ],
+                ]);
             }
         } else {
             return response()->json([

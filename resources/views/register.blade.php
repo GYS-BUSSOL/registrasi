@@ -154,7 +154,8 @@
             Html5Qrcode.getCameras()
                 .then(cameras => {
                     if (cameras && cameras.length) {
-                        const cameraId = cameras[0].id;
+                        console.log(cameras)
+                        const cameraId = cameras[Object.keys(cameras).length - 1].id;
                         html5QrCode.start(
                             cameraId, {
                                 fps: 10,
