@@ -183,6 +183,7 @@
             console.log(qrCode)
             const info = document.getElementById('info');
             let csrfToken = $('input[name="_token"]').val();
+
             $.ajax({
                 url: '/cek-karyawan', // Route ke controller
                 method: 'POST',
@@ -219,9 +220,7 @@
                                     `;
                                     // Tampilkan modal
                                     $('#popUpInfo').modal('show');
-                                    $('#popUpInfo').on('hidden.bs.modal', function() {
-                                        location.reload(); // Refresh halaman
-                                    });
+                                    $('#popUpInfo').on('hidden.bs.modal', function() {});
                                 }
                             });
                         });
@@ -233,9 +232,7 @@
                                     `;
                         // Tampilkan modal
                         $('#popUpInfo').modal('show');
-                        $('#popUpInfo').on('hidden.bs.modal', function() {
-                            location.reload(); // Refresh halaman
-                        });
+                        $('#popUpInfo').on('hidden.bs.modal', function() {});
                     }
                 }
             });

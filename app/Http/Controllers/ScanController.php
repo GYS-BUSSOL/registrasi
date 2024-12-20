@@ -68,25 +68,34 @@ class ScanController extends Controller
 
     public function scanRegister(Request $request)
     {
-        DB::insert('INSERT INTO trn_registration (employee_id, is_flag, created_at, created_by, updated_at, updated_by) VALUES (?, ?, ?, ?, ?, ?)', [
-            $request->employee_id,
-            1,
-            now()->format('Y-m-d H:i:s'),
-            session('id'),
-            now()->format('Y-m-d H:i:s'),
-            session('id'),
-        ]);
+        $employeeExist = DB::select('SELECT * FROM trn_registration WHERE employee_id = ?', [$request->employee_id]);
 
-        DB::insert('INSERT INTO his_registration (employee_id, is_flag, created_at, created_by) VALUES (?, ?, ?, ?)', [
-            $request->employee_id,
-            1,
-            now()->format('Y-m-d H:i:s'),
-            session('id'),
-        ]);
-        return response()->json([
-            'success' => true,
-            'message' => 'Registrasi Berhasil',
-        ]);
+        if (empty($employeeExist)) {
+            DB::insert('INSERT INTO trn_registration (employee_id, is_flag, created_at, created_by, updated_at, updated_by) VALUES (?, ?, ?, ?, ?, ?)', [
+                $request->employee_id,
+                1,
+                now()->format('Y-m-d H:i:s'),
+                session('id'),
+                now()->format('Y-m-d H:i:s'),
+                session('id'),
+            ]);
+
+            DB::insert('INSERT INTO his_registration (employee_id, is_flag, created_at, created_by) VALUES (?, ?, ?, ?)', [
+                $request->employee_id,
+                1,
+                now()->format('Y-m-d H:i:s'),
+                session('id'),
+            ]);
+            return response()->json([
+                'success' => true,
+                'message' => 'Registrasi Berhasil',
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Karyawan sudah Registrasi',
+            ]);
+        }
     }
     public function scanLunch(Request $request)
     {
