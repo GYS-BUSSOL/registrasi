@@ -16,10 +16,10 @@
                 <div class="col-md-12">
                     <div class="panel panel-primary cardbg">
                         <div class="card">
-                            <div class="card-body">
-                                <div class="col-md-12"><br>
-                                    <form class="form-horizontal">
-                                        @csrf
+                            <form id="barcode" class="form-horizontal">
+                                @csrf
+                                <div class="card-body">
+                                    <div class="col-md-12"><br>
                                         <div>
                                             <!-- SCAN CODE QR WITH CAMERA -->
                                             <div class="col-md-5 col-md-offset-4">
@@ -29,21 +29,22 @@
                                                 </div>
                                             </div>
                                             <!-- SCAN CODE QR WITH CAMERA -->
-                                    </form>
-                                </div> <br>
-                                <div class="row">
-                                    <form id="barcode" action="">
-                                        @csrf
-                                        <div class="form-group col-md-4" style="margin-left: 10px;">
-                                            <input type="text" class="form-control" name="qr_number" id='qr_number'
-                                                placeholder="Masukan NIK Karyawan" required />
+                                            {{-- </form> --}}
+                                        </div> <br>
+                                        <div class="row">
+                                            {{-- <form id="barcode" action="">
+                                        @csrf --}}
+                                            <div class="form-group col-md-4" style="margin-left: 10px;">
+                                                <input type="text" class="form-control" name="qr_number" id='qr_number'
+                                                    placeholder="Masukan NIK Karyawan" required />
+                                            </div>
+                                            <div>
+                                                <button type="submit" class="btn btn-primary">Search</button>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <button type="submit" class="btn btn-primary">Search</button>
-                                        </div>
-                                    </form>
+                                    </div>
                                 </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -124,6 +125,8 @@
             });
         });
 
+        const html5QrCode = new Html5Qrcode("reader");
+
         // JQUERY SCAN CODE QR
         function docReady(fn) {
             // see if DOM is already available
@@ -148,15 +151,32 @@
                 html5QrcodeScanner.clear();
             }
 
-
-            var html5QrcodeScanner = new Html5QrcodeScanner(
-                "reader", {
-                    fps: 10,
-                    qrbox: 250
-                });
-            html5QrcodeScanner.render(onScanSuccess);
+            Html5Qrcode.getCameras()
+                .then(cameras => {
+                    if (cameras && cameras.length) {
+                        const cameraId = cameras[0].id;
+                        html5QrCode.start(
+                            cameraId, {
+                                fps: 10,
+                                qrbox: {
+                                    width: 250,
+                                    height: 250
+                                }
+                            },
+                            onScanSuccess, // Callback untuk pemindaian sukses
+                            (errorMessage) => {
+                                console.warn(`QR Code scan failed: ${errorMessage}`);
+                            }
+                        ).catch(err => console.error("Failed to start scanning:", err));
+                    } else {
+                        console.error("No cameras found.");
+                    }
+                })
+                .catch(err => console.error("Error getting cameras:", err));
 
         });
+
+
 
         function getData(qrCode) {
             console.log(qrCode)
