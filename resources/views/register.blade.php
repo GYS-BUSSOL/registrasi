@@ -79,6 +79,9 @@
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <button class="btn btn-secondary ml-1" data-bs-dismiss="modal">
+                        <span class="d-sm-block">Batal</span>
+                    </button>
                     <button id="confirm" type="submit" class="btn btn-primary ml-1" data-bs-dismiss="modal">
                         <span class="d-sm-block">OK</span>
                     </button>
